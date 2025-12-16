@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "msjsdiag.debugger-for-chrome",
+    "EditorConfig.EditorConfig",
+    "ecmel.vscode-html-css",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "vincaslt.highlight-matching-tag"
+  ]
+}
