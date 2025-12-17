@@ -25,3 +25,15 @@ export interface ReviewFilter {
   sortOrder?: 'asc' | 'desc';
   isVisible?: boolean;
 }
+
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  lastPage: number;
+  limit: number;
+}
+
+export interface PaginatedResponse {
+  data: Review[];
+  meta: PaginationMeta;
+}

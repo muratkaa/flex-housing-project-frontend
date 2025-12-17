@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Review, ReviewFilter } from '../types';
+import type { PaginatedResponse, Review, ReviewFilter } from '../types';
 import { ENV_VAR } from '../config';
 import { removeEmptyParams } from '@/lib/utils';
 
@@ -13,8 +13,20 @@ export const api = axios.create({
 //get reviews api call
 export const getReviews = async (params: ReviewFilter = {}) => {
   const cleanParams = removeEmptyParams(params);
-
   const { data } = await api.get<Review[]>('/reviews', { params: cleanParams });
+  return data;
+};
+
+
+// get paginated reviews
+export const getPaginatedReviews = async (
+  params: ReviewFilter & { page: number; limit: number }
+) => {
+  const cleanParams = removeEmptyParams(params);
+  const { data } = await api.get<PaginatedResponse>('/reviews/paginated', {
+    params: cleanParams
+  });
+
   return data;
 };
 

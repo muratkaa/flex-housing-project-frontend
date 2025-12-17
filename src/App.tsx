@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import DashboardPage from './pages/dashboard/DashboardPage'
-import PropertyPage from './pages/public/PropertyPage'
+import PropertyPage from './pages/property-detail/PropertyPage'
 import { Button } from './components/ui/button'
 
 function App() {
