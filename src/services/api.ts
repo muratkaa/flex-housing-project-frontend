@@ -1,29 +1,31 @@
 import axios from 'axios';
 import type { Review, ReviewFilter } from '../types';
+import { ENV_VAR } from '../config';
+import { removeEmptyParams } from '@/lib/utils';
 
-// Backend adresimiz (NestJS varsayılan portu 3000)
-const API_URL = 'http://localhost:3000';
+const API_URL = ENV_VAR.BACKEND_BASE_URL;
 
 export const api = axios.create({
   baseURL: API_URL,
 });
 
-export const getReviews = async (params?: ReviewFilter) => {
-  // Parametreleri temizle (undefined olanları gönderme)
-  const cleanParams = Object.fromEntries(
-    Object.entries(params || {}).filter(([, v]) => v != null && v !== '')
-  );
 
-  const response = await api.get<Review[]>('/reviews', { params: cleanParams });
-  return response.data;
+//get reviews api call
+export const getReviews = async (params: ReviewFilter = {}) => {
+  const cleanParams = removeEmptyParams(params);
+
+  const { data } = await api.get<Review[]>('/reviews', { params: cleanParams });
+  return data;
 };
 
+//update reviews visibility api call
 export const updateReviewVisibility = async (id: number, isVisible: boolean) => {
-  const response = await api.patch(`/reviews/${id}/visibility`, { isVisible });
-  return response.data;
+  const { data } = await api.patch(`/reviews/${id}/visibility`, { isVisible });
+  return data;
 };
 
+//sync for developing purposes, i ve explained in backend codes comment
 export const syncReviews = async () => {
-  const response = await api.post('/reviews/sync');
-  return response.data;
+  const { data } = await api.get<{ status: string; message: string }>('/reviews/sync');
+  return data;
 };

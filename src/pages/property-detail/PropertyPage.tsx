@@ -10,8 +10,8 @@ export default function PropertyPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Sadece 'isVisible: true' olanları çekiyoruz
-    getReviews({ isVisible: true, listingName: 'Modern Apt in Shoreditch' }) // Örnek olarak bir evi filtreledik
+
+    getReviews({ isVisible: true})
       .then(setReviews)
       .catch(console.error)
       .finally(() => setLoading(false))

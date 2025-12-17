@@ -7,9 +7,8 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-slate-50">
-        {/* Üstteki Test Menüsü (Geçişi kolaylaştırmak için) */}
         <div className="bg-slate-900 text-white p-2 text-center text-sm flex justify-center gap-4 items-center">
-          <span>Developer Navigation:</span>
+          <span>Navigation:</span>
           <Link to="/">
             <Button variant="link" className="text-white h-auto p-0">
               Manager Dashboard

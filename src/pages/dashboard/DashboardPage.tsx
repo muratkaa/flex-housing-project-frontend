@@ -16,8 +16,6 @@ import {
 export default function DashboardPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
-
-  // Filtre State'leri
   const [listingFilter, setListingFilter] = useState('')
   const [ratingFilter, setRatingFilter] = useState('0')
   const [channelFilter, setChannelFilter] = useState('all')
@@ -39,11 +37,11 @@ export default function DashboardPage() {
     }
   }
 
-  // Filtreler değiştikçe veriyi yeniden çek
+
   useEffect(() => {
     const timer = setTimeout(() => {
       loadData()
-    }, 500) // Debounce (Yazarken sürekli istek atmasın diye gecikme)
+    }, 500)
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingFilter, ratingFilter, channelFilter])

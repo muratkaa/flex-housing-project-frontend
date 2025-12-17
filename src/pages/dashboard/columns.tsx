@@ -76,28 +76,23 @@ export const columns: ColumnDef<Review>[] = [
       return new Date(row.getValue('date')).toLocaleDateString()
     },
   },
-  // --- GÜNCELLENEN KISIM: SWITCH MANTIĞI ---
   {
     accessorKey: 'isVisible',
     header: 'Public?',
     cell: ({ row }) => {
       const review = row.original
-      // Local state kullanarak anında tepki veriyoruz (Optimistic UI)
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [isVisible, setIsVisible] = useState(review.isVisible)
 
       const handleToggle = async (checked: boolean) => {
-        // 1. UI'ı hemen güncelle (Kullanıcı beklemesin)
         setIsVisible(checked)
 
         try {
-          // 2. Arka planda API'ye haber ver
           await updateReviewVisibility(review.id, checked)
         } catch (error) {
-          // 3. Hata olursa UI'ı geri al
           console.error('Failed to update visibility', error)
           setIsVisible(!checked)
-          alert('Güncelleme başarısız!')
+          alert('Update Failed!')
         }
       }
 
