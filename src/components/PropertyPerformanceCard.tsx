@@ -7,7 +7,7 @@ interface Props {
   data: PropertyStat;
 }
 
-export const PropertyCard: React.FC<Props> = ({ data }) => {
+export const PropertyPerformanceCard: React.FC<Props> = ({ data }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col h-full hover:shadow-md transition-shadow">
 

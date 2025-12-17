@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import type { Review, ReviewFilter } from '@/types';
 import { usePropertyStats } from '@/hooks/usePropertyStats';
-import { PropertyCard } from '@/components/PropertyCard';
 import { FilterBar } from '@/components/FilterBar';
 import { Button } from '@/components/ui/button';
 import { getReviews } from '@/services/api';
+import { PropertyPerformanceCard } from '@/components/PropertyPerformanceCard';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -88,7 +88,7 @@ export const AnalyticsView: React.FC = () => {
           {/* GRID LAYOUT */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {currentStats.map((stat) => (
-              <PropertyCard key={stat.id} data={stat} />
+              <PropertyPerformanceCard key={stat.id} data={stat} />
             ))}
           </div>
 
