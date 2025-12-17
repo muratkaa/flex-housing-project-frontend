@@ -19,7 +19,7 @@ export const ListingPropertyCard: React.FC<Props> = ({ property }) => {
       {/* 1. IMAGE AREA */}
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={property.image}
+          src={property.images[0]}
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
