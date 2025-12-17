@@ -14,7 +14,7 @@ export const ReviewsView: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Filtreler
+  // Filters
   const [filters, setFilters] = useState<ReviewFilter>({
     sortBy: 'date',
     sortOrder: 'desc'
@@ -29,19 +29,18 @@ export const ReviewsView: React.FC = () => {
     lastPage: 1
   });
 
-  // --- DATA FETCHING ---
+  //Fetch data
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      // YENİ API ÇAĞRISI
       const response = await getPaginatedReviews({
-        ...filters,       // Filtreleri ekle
-        page: page,       // Sayfa numarasını ekle
-        limit: ITEMS_PER_PAGE // Limit: 20
+        ...filters,
+        page: page,
+        limit: ITEMS_PER_PAGE
       });
 
       setReviews(response.data);
-      setMeta(response.meta); // Backend'den gelen meta verisini kaydet
+      setMeta(response.meta);
 
     } catch (error) {
       console.error('Fetch error:', error);
@@ -50,12 +49,11 @@ export const ReviewsView: React.FC = () => {
     }
   };
 
-  // Filtre değişince sayfa 1'e dönsün
   useEffect(() => {
     setPage(1);
   }, [filters]);
 
-  // Page veya Filters değişince (veya mount olunca) veriyi çek
+
   useEffect(() => {
     fetchReviews();
   }, [page, filters]);
@@ -63,12 +61,10 @@ export const ReviewsView: React.FC = () => {
   // --- VISIBILITY TOGGLE ---
   const handleToggleVisibility = async (id: number, currentStatus: boolean) => {
     const newStatus = !currentStatus;
-    // Optimistic Update
     setReviews(prev => prev.map(r => r.id === id ? { ...r, isVisible: newStatus } : r));
     try {
       await updateReviewVisibility(id, newStatus);
     } catch (e) {
-      // Rollback
       setReviews(prev => prev.map(r => r.id === id ? { ...r, isVisible: currentStatus } : r));
       alert('Failed to update status');
     }

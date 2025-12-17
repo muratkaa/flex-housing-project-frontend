@@ -3,8 +3,6 @@ import {  ReviewsView } from './views/ReviewsView';
 import { syncReviews } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-
-// View'ları import et
 import { AnalyticsView } from './views/AnalyticsView';
 
 type TabType = 'reviews' | 'analytics';
@@ -13,17 +11,10 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabType>('reviews');
   const [syncing, setSyncing] = useState(false);
 
-  // Global Sync Fonksiyonu
-  // Sync işlemi backend'i günceller, View'lar kendi içlerinde veriyi çekerken
-  // güncel veriyi alacaklardır.
   const handleSync = async () => {
     try {
       setSyncing(true);
       await syncReviews();
-
-      // Sync bittiğinde sayfayı yenileyerek view'ların taze veri çekmesini sağlayabiliriz
-      // Veya daha gelişmiş state yönetimi (Context/Redux) kullanabiliriz.
-      // Şimdilik en temizi sayfayı yenilemek:
       window.location.reload();
 
       alert('Sync successful!');
@@ -71,11 +62,7 @@ export default function DashboardPage() {
 
       {/* VIEW CONTAINER */}
       <div className="min-h-[500px]">
-        {/* Prop geçmiyoruz! Her view kendi verisini çekecek.
-          Bu sayede Analytics sekmesindeyken gereksiz yere tablo verisini işlememiş oluruz.
-        */}
         {activeTab === 'reviews' ? (
-          // Sadece component'i çağırıyoruz, içine hiçbir veri göndermiyoruz.
           <ReviewsView />
         ) : (
           <AnalyticsView />
@@ -99,8 +86,3 @@ const TabButton = ({ isActive, onClick, label }: any) => (
     {label}
   </button>
 );
-
-// ÖNEMLİ NOT: ReviewsView daha önce prop alıyordu.
-// Onu da AnalyticsView gibi bağımsız hale getirmek için küçük bir Wrapper
-// veya ReviewsView dosyasını revize etmemiz gerekir.
-// Aşağıda Wrapper ile hızlı çözüm sunuyorum:

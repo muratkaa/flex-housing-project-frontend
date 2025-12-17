@@ -11,7 +11,7 @@ export const PropertyCard: React.FC<Props> = ({ data }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col h-full hover:shadow-md transition-shadow">
 
-      {/* HEADER: İsim ve Puan */}
+      {/* HEADER  */}
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="font-semibold text-slate-900 line-clamp-1" title={data.name}>
@@ -46,10 +46,10 @@ export const PropertyCard: React.FC<Props> = ({ data }) => {
         </ResponsiveContainer>
       </div>
 
-      {/* INSIGHTS: Categories */}
+      {/* INSIGHTS */}
       <div className="mt-auto space-y-3">
 
-        {/* NEGATIVE (ISSUES) - Önce kötü haberler */}
+        {/* NEGATIVE (ISSUES) */}
         {data.issues.length > 0 && (
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
@@ -73,7 +73,7 @@ export const PropertyCard: React.FC<Props> = ({ data }) => {
               🏆 Top Features
             </p>
             <div className="flex flex-wrap gap-1.5">
-              {data.highlights.slice(0, 3).map((item) => ( // Sadece ilk 3 tanesini göster
+              {data.highlights.slice(0, 3).map((item) => (
                 <span key={item.category} className="inline-flex items-center px-2 py-1 rounded bg-green-50 border border-green-100 text-xs text-green-700">
                   <span className="capitalize mr-1">{item.category}:</span>
                   <strong>{item.score}</strong>
@@ -82,7 +82,6 @@ export const PropertyCard: React.FC<Props> = ({ data }) => {
             </div>
           </div>
         ) : (
-          /* Eğer hiç highlight yoksa boş kalmasın */
           <div className="text-xs text-slate-400 italic">No specific highlights yet.</div>
         )}
 
@@ -91,7 +90,7 @@ export const PropertyCard: React.FC<Props> = ({ data }) => {
   );
 };
 
-// Yardımcı Renk Fonksiyonu
+
 function getRatingColor(rating: number) {
   if (rating >= 4.5) return 'text-green-600';
   if (rating >= 3.0) return 'text-yellow-600';

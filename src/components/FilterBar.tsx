@@ -8,9 +8,10 @@ interface FilterBarProps {
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange }) => {
+
   const [searchTerm, setSearchTerm] = useState(filters.listingName || '');
 
-  // Debounce (300ms) - Mevcut kodun
+  //debounce for search
   useEffect(() => {
     const handler = setTimeout(() => {
       if (searchTerm !== filters.listingName) {
@@ -20,14 +21,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange })
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
+  // generic handler to update simple key-value pairs in the filter object
   const handleDirectChange = (key: keyof ReviewFilter, value: any) => {
     onFilterChange({ ...filters, [key]: value });
   };
 
-  // --- YENİ: SMART SORT HANDLER ---
-  // Tek dropdown'dan gelen değeri parçalayıp Backend'e uygun hale getirir
+  // Handler for the "Smart Sort" dropdown
   const handleSortChange = (value: string) => {
-    const [sortBy, sortOrder] = value.split('-'); // 'rating-desc' -> sortBy='rating', sortOrder='desc'
+    const [sortBy, sortOrder] = value.split('-');
     onFilterChange({
       ...filters,
       sortBy: sortBy as any,
@@ -38,7 +39,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange })
   return (
     <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 flex flex-wrap gap-4 items-end">
 
-      {/* 1. SEARCH */}
+      {/*Search List*/}
       <div className="flex flex-col gap-1.5 w-full md:w-auto md:flex-1">
         <label className="text-xs font-semibold text-slate-500 uppercase">Search Listing</label>
         <input
@@ -50,7 +51,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange })
         />
       </div>
 
-      {/* 2. CHANNEL */}
+      {/* Channel Filter */}
       <div className="flex flex-col gap-1.5 w-1/2 md:w-32">
         <label className="text-xs font-semibold text-slate-500 uppercase">Channel</label>
         <select
@@ -66,7 +67,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange })
         </select>
       </div>
 
-      {/* 3. RATING FILTER */}
+      {/*  Rating Filter  */}
       <div className="flex flex-col gap-1.5 w-1/3 md:w-28">
         <label className="text-xs font-semibold text-slate-500 uppercase">Min Stars</label>
         <select
@@ -81,12 +82,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({ filters, onFilterChange })
         </select>
       </div>
 
-      {/* 4. SMART SORT (YENİ VE GELİŞMİŞ) */}
+      {/* Smart Sort */}
       <div className="flex flex-col gap-1.5 w-full md:w-48">
         <label className="text-xs font-semibold text-slate-500 uppercase">Sort Order</label>
         <select
           className="border border-slate-300 rounded px-3 py-2 text-sm bg-white focus:outline-none font-medium text-slate-700"
-          // Mevcut state'i birleştirerek value oluşturuyoruz
           value={`${filters.sortBy || 'date'}-${filters.sortOrder || 'desc'}`}
           onChange={(e) => handleSortChange(e.target.value)}
         >

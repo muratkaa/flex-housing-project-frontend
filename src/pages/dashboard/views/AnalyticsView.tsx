@@ -3,33 +3,32 @@ import type { Review, ReviewFilter } from '@/types';
 import { usePropertyStats } from '@/hooks/usePropertyStats';
 import { PropertyCard } from '@/components/PropertyCard';
 import { FilterBar } from '@/components/FilterBar';
-import { Button } from '@/components/ui/button'; // Eğer button componentin varsa
+import { Button } from '@/components/ui/button';
 import { getReviews } from '@/services/api';
 
-const ITEMS_PER_PAGE = 9; // Her sayfada 9 kart (3x3 grid)
+const ITEMS_PER_PAGE = 9;
 
 export const AnalyticsView: React.FC = () => {
   // --- STATE ---
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Filtreleme State'i
+  // Filter state
   const [filters, setFilters] = useState<ReviewFilter>({
     sortBy: 'date',
     sortOrder: 'desc'
   });
 
-  // Pagination State'i
+  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
 
-  // --- DATA FETCHING ---
+  // Fetch data
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      // Backend'den filtrelenmiş ham veriyi çekiyoruz
       const data = await getReviews(filters);
       setReviews(data);
-      setCurrentPage(1); // Filtre değişirse 1. sayfaya dön
+      setCurrentPage(1);
     } catch (error) {
       console.error('Failed to fetch analytics data', error);
     } finally {
@@ -42,10 +41,10 @@ export const AnalyticsView: React.FC = () => {
   }, [filters]);
 
   // --- HESAPLAMALAR ---
-  // 1. Ham veriyi evlere (PropertyStats) dönüştür
+  //Rawdata to property stats
   const allStats = usePropertyStats(reviews);
 
-  // 2. Client-Side Pagination Mantığı
+  //Client-Side Pagination
   const totalPages = Math.ceil(allStats.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentStats = allStats.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -54,7 +53,6 @@ export const AnalyticsView: React.FC = () => {
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      // Sayfa değişince yukarı kaydır
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -71,7 +69,7 @@ export const AnalyticsView: React.FC = () => {
           </p>
         </div>
 
-        {/* FİLTRE BAR BURAYA GELDİ */}
+        {/* FİLTRE BAR */}
         <FilterBar filters={filters} onFilterChange={setFilters} />
       </div>
 

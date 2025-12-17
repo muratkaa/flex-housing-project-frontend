@@ -3,7 +3,6 @@ import type { Review } from '@/types';
 
 interface ReviewListProps {
   reviews: Review[];
-  // Toggle fonksiyonunu prop olarak alıyoruz
   onToggleVisibility: (id: number, currentStatus: boolean) => void;
 }
 
@@ -27,7 +26,6 @@ export const ReviewList: React.FC<ReviewListProps> = ({ reviews, onToggleVisibil
             <th className="px-6 py-4">Rating</th>
             <th className="px-6 py-4">Channel</th>
             <th className="px-6 py-4">Date</th>
-            {/* YENİ SÜTUN: VISIBILITY */}
             <th className="px-6 py-4 text-center">Public?</th>
             <th className="px-6 py-4 rounded-tr-lg">Comment</th>
           </tr>
@@ -47,7 +45,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({ reviews, onToggleVisibil
                 {new Date(review.date).toLocaleDateString('en-GB')}
               </td>
 
-              {/* YENİ: VISIBILITY TOGGLE SWITCH */}
+              {/* VISIBILITY TOGGLE SWITCH */}
               <td className="px-6 py-4 text-center">
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input

@@ -19,7 +19,7 @@ export default function PropertyPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
-      {/* Navbar (Mock) */}
+      {/* Navbar*/}
       <nav className="border-b sticky top-0 bg-white/80 backdrop-blur-md z-10">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <span className="text-xl font-bold tracking-tighter">
@@ -61,9 +61,9 @@ export default function PropertyPage() {
       </div>
 
       <div className="container mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Sol Kolon: Detaylar */}
+        {/* Left Col: Details */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Açıklama */}
+          {/* Description */}
           <section>
             <h2 className="text-2xl font-bold mb-4">About this home</h2>
             <p className="text-slate-600 leading-relaxed">
@@ -87,7 +87,7 @@ export default function PropertyPage() {
 
           <hr />
 
-          {/* YORUMLAR BÖLÜMÜ (Task'ın asıl istediği yer) */}
+          {/* Comments */}
           <section>
             <div className="flex items-center gap-4 mb-6">
               <h2 className="text-2xl font-bold">Guest Reviews</h2>
@@ -138,7 +138,7 @@ export default function PropertyPage() {
           </section>
         </div>
 
-        {/* Sağ Kolon: Rezervasyon Kartı (Süs) */}
+        {/* Right Col: Reservation  */}
         <div className="lg:col-span-1">
           <div className="sticky top-24 border rounded-xl p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">

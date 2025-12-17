@@ -6,13 +6,13 @@ export const useDashboardStats = (reviews: Review[]) => {
   const stats = useMemo(() => {
     if (!reviews.length) return null;
 
-    // --- 1. GENEL ÖZET ---
+    //GENERAL SUMMARY
     const totalReviews = reviews.length;
     const averageRating =
       reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews;
 
-    // --- 2. PER-PROPERTY PERFORMANCE ---
-    // Her mülk için gruplama yapıyoruz
+    //PER-PROPERTY PERFORMANCE
+
     const listingMap = reviews.reduce((acc, review) => {
       const name = review.listingName;
       if (!acc[name]) {
@@ -20,7 +20,7 @@ export const useDashboardStats = (reviews: Review[]) => {
       }
       acc[name].totalRating += review.rating;
       acc[name].count += 1;
-      if (review.rating < 4) acc[name].lowScores += 1; // 4 altı riskli
+      if (review.rating < 4) acc[name].lowScores += 1;
       return acc;
     }, {} as Record<string, any>);
 
@@ -29,11 +29,11 @@ export const useDashboardStats = (reviews: Review[]) => {
         name: p.name,
         avgRating: Number((p.totalRating / p.count).toFixed(1)),
         count: p.count,
-        riskFactor: p.lowScores, // Sorunlu yorum sayısı
+        riskFactor: p.lowScores,
       }))
-      .sort((a, b) => b.avgRating - a.avgRating); // En iyiden en kötüye sırala
+      .sort((a, b) => b.avgRating - a.avgRating);
 
-    // --- 3. TRENDS (AYLIK DEĞİŞİM) ---
+    //TRENDS
     const monthlyData = reviews.reduce((acc, review) => {
       const date = new Date(review.date);
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -51,7 +51,7 @@ export const useDashboardStats = (reviews: Review[]) => {
         date: d.date,
         rating: Number((d.total / d.count).toFixed(1)),
       }))
-      .sort((a, b) => a.date.localeCompare(b.date)); // Tarihe göre sırala
+      .sort((a, b) => a.date.localeCompare(b.date));
 
     return {
       totalReviews,
