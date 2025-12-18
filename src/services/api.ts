@@ -41,3 +41,11 @@ export const syncReviews = async () => {
   const { data } = await api.get<{ status: string; message: string }>('/reviews/sync');
   return data;
 };
+
+//calculate rating
+export const getListingRating = async (listingName: string) => {
+  const response = await api.get<{ rating: number; count: number }>('/reviews/rating', {
+    params: { listingName },
+  });
+  return response.data;
+};

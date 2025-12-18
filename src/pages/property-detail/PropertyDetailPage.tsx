@@ -1,7 +1,7 @@
 import { PublicReviewCard } from '@/components/PublicReviewCard';
 import { Button } from '@/components/ui/button';
 import { PROPERTIES } from '@/data/properties';
-import { getReviews } from '@/services/api';
+import { getReviews, getListingRating } from '@/services/api'; // getListingRating eklendi
 import type { Review } from '@/types';
 import { ArrowLeft, CheckCircle, Grid, MapPin, Star, Users, Wifi } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -9,26 +9,31 @@ import { Link, useParams } from 'react-router-dom';
 
 export default function PropertyDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [stats, setStats] = useState({ rating: 0, count: 0 });
   const [loadingReviews, setLoadingReviews] = useState(false);
 
   const property = PROPERTIES.find((p) => p.id === Number(id));
 
   useEffect(() => {
     if (property) {
-      const fetchPropertyReviews = async () => {
+      const fetchData = async () => {
         setLoadingReviews(true);
         try {
-          const data = await getReviews({ listingName: property.title });
-          const publicReviews = data.filter(r => r.isVisible);
+          const reviewsData = await getReviews({ listingName: property.title });
+          const publicReviews = reviewsData.filter(r => r.isVisible);
           setReviews(publicReviews);
+
+          const ratingData = await getListingRating(property.title);
+          setStats(ratingData);
+
         } catch (error) {
-          console.error("Failed to load reviews", error);
+          console.error("Failed to load property data", error);
         } finally {
           setLoadingReviews(false);
         }
       };
-      fetchPropertyReviews();
+      fetchData();
     }
   }, [property]);
 
@@ -43,16 +48,17 @@ export default function PropertyDetailPage() {
   return (
     <div className="min-h-screen bg-white pb-20">
 
+      {/* 1. PHOTO GRID SECTION */}
       <div className="relative container mx-auto px-4 pt-6">
 
         <Link to="/properties" className="absolute top-8 left-6 z-20 bg-white/90 backdrop-blur p-2 rounded-full shadow-sm hover:bg-white transition-colors md:hidden">
           <ArrowLeft size={20} className="text-slate-900" />
         </Link>
 
-        {/* MAIN GRID CONTAINER */}
+        {/* GRID CONTAINER */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 rounded-xl overflow-hidden h-auto md:h-[60vh] relative">
 
-          {/* LEFT COL */}
+          {/* LEFT COL (MAIN IMAGE ) */}
           <div className="md:col-span-2 w-full h-[40vh] md:h-full relative group cursor-pointer">
             <img
               src={mainImage}
@@ -61,9 +67,8 @@ export default function PropertyDetailPage() {
             />
           </div>
 
-          {/* RIGHT COL*/}
+          {/* RIGHT COL (SUB IMAGES */}
           <div className="hidden md:grid md:col-span-2 grid-cols-2 grid-rows-2 gap-2 h-full">
-            {/* Eğer 4'ten az resim varsa bile döngü çalışır, layout bozulmaz */}
             {subImages.map((img, index) => (
               <div key={index} className="relative group cursor-pointer w-full h-full">
                 <img
@@ -98,11 +103,17 @@ export default function PropertyDetailPage() {
                   <MapPin size={16} className="mr-1" />
                   {property.location}
                 </div>
+
+                {/* DYNAMIC RATING HEADER */}
                 <div className="flex items-center gap-1">
                    <Star size={16} className="fill-slate-900 text-slate-900" />
-                   <span className="font-semibold text-base">{property.rating}</span>
+                   <span className="font-semibold text-base">
+                     {stats.count > 0 ? stats.rating : "New"}
+                   </span>
                    <span className="text-slate-400 mx-1">·</span>
-                   <span className="underline font-medium text-slate-900">{reviews.length} reviews</span>
+                   <span className="underline font-medium text-slate-900">
+                     {stats.count} reviews
+                   </span>
                 </div>
               </div>
             </div>
@@ -160,11 +171,11 @@ export default function PropertyDetailPage() {
                </div>
             </div>
 
-            {/* REVIEWS */}
+            {/* REVIEWS SECTION */}
             <div className="py-4">
               <h3 className="font-bold text-xl text-slate-900 mb-8 flex items-center gap-2">
                 <Star size={20} className="fill-slate-900" />
-                {property.rating} · {reviews.length} reviews
+                {stats.count > 0 ? stats.rating : "New"} · {stats.count} reviews
               </h3>
 
               {loadingReviews ? (
@@ -191,9 +202,11 @@ export default function PropertyDetailPage() {
                    <span className="text-2xl font-bold text-slate-900">£{property.price.toLocaleString()}</span>
                    <span className="text-slate-500 text-sm"> / month</span>
                 </div>
+                {/* DYNAMIC RATING CARD */}
                 <div className="flex items-center gap-1 text-sm font-semibold text-slate-900">
                    <Star size={14} className="fill-slate-900" />
-                   {property.rating}
+                   {stats.count > 0 ? stats.rating : "New"}
+                   <span className="text-slate-400 font-normal">({stats.count})</span>
                 </div>
               </div>
 
